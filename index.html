@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happic - ポートフォリオサイト</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* カスタムスタイル */
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+            cursor: none; /* デフォルトカーソルを非表示 */
+        }
+        .accent-blue { color: #00BFFF; }
+        .bg-accent-blue { background-color: #00BFFF; }
+        .border-accent-blue { border-color: #00BFFF; }
+        .hover\:bg-accent-blue:hover { background-color: #00BFFF; }
+        .hover\:text-accent-blue:hover { color: #00BFFF; }
+        a, button, .group { cursor: none; }
+
+        /* ローディング画面 v7.0 - Gate Open */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            overflow: hidden; /* ゲートがはみ出さないように */
+        }
+        #loader-content {
+            width: 90%;
+            max-width: 250px;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 102; /* ゲートより手前 */
+            transition: opacity 0.3s ease-out;
+        }
+        #loader-logo-img {
+            max-width: 180px;
+            margin: 0 auto 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: logo-fade-in-up 1s ease-out 0.2s forwards;
+        }
+        #loader-counter-container {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #f5f5f5;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: fade-in 0.5s 0.8s ease-out forwards;
+        }
+        .progress-bar-container {
+            width: 100%;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            opacity: 0;
+            animation: fade-in 0.5s 0.8s ease-out forwards;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #00BFFF;
+            border-radius: 2px;
+            animation: fill-bar 2s cubic-bezier(0.83, 0, 0.17, 1) 1s forwards;
+        }
+
+        #loader-gate-left, #loader-gate-right {
+            position: fixed;
+            top: 0;
+            width: 50.5%; /* 少し重ねて隙間を防ぐ */
+            height: 100%;
+            background-color: #0a0a0a;
+            z-index: 101; /* コンテンツより手前 */
+            transition: transform 1.2s cubic-bezier(0.83, 0, 0.17, 1);
+        }
+        #loader-gate-left { left: 0; }
+        #loader-gate-right { right: 0; }
+
+        /* ローディング完了後のアニメーション */
+        #loader.loading-finished #loader-content {
+            opacity: 0;
+        }
+        #loader.loading-finished #loader-gate-left {
+            transform: translateX(-100%);
+        }
+        #loader.loading-finished #loader-gate-right {
+            transform: translateX(100%);
+        }
+        
+        @keyframes logo-fade-in-up {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fade-in {
+            to { opacity: 1; }
+        }
+        @keyframes fill-bar {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        /* カスタムカーソル */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00BFFF;
+            border-radius: 50%;
+            left: 0;
+            top: 0;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            z-index: 9999;
+        }
+        .cursor.grow {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 191, 255, 0.2);
+        }
+
+        /* アニメーション */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .reveal-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .stagger-child {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .stagger-child.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ヒーローセクション */
+        #hero-video-container {
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            overflow: hidden;
+        }
+        #hero-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .video-overlay {
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+        .scroll-down-icon { animation: bounce 2s infinite; }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        /* Works Filter */
+        .filter-btn {
+            background-color: transparent;
+            border: 2px solid #374151; /* gray-700 */
+            color: #d1d5db; /* gray-300 */
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover {
+            background-color: #374151; /* gray-700 */
+            color: #f5f5f5;
+        }
+        .filter-btn.active {
+            background-color: #00BFFF; /* accent-blue */
+            border-color: #00BFFF;
+            color: #0a0a0a;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- ローディング画面 v7.0 - Gate Open -->
+    <div id="loader">
+        <div id="loader-content">
+            <img src="happiclogo.png" alt="Happic Logo" id="loader-logo-img" onerror="this.style.display='none';">
+            <div id="loader-counter-container">
+                <span id="loader-counter">0</span>%
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+        <div id="loader-gate-left"></div>
+        <div id="loader-gate-right"></div>
+    </div>
+
+    <!-- カスタムカーソル -->
+    <div class="cursor"></div>
+
+    <!-- ヘッダー -->
+    <header class="fixed top-0 left-0 w-full bg-black/50 backdrop-blur-sm z-50 transition-all duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="z-50">
+                <img src="happiclogo.png" alt="Happic Logo" class="h-8 w-auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <span style="display:none;" class="text-2xl font-black tracking-wider">Happic</span>
+            </a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#works" class="text-sm font-bold uppercase tracking-widest hover:text-accent-blue transition-colors duration-300">Works</a>
+                <a href="#about" class="text-sm font-bold uppercase tracking-widest hover:text-accent-blue transition-colors duration-300">About</a>
+                <a href="#service" class="text-sm font-bold uppercase tracking-widest hover:text-accent-blue transition-colors duration-300">Service</a>
+                <a href="#contact" class="text-sm font-bold uppercase tracking-widest border-2 border-white px-4 py-2 rounded-full hover:bg-white hover:text-black transition-all duration-300">Contact</a>
+            </nav>
+            <!-- ハンバーガーボタン -->
+            <button id="hamburger-btn" class="md:hidden text-white z-50">
+                <svg id="menu-open-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                <svg id="menu-close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- モバイルメニュー -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black/95 backdrop-blur-sm z-40 flex items-center justify-center transition-opacity duration-300 opacity-0 pointer-events-none">
+        <nav class="flex flex-col items-center text-center space-y-8">
+            <a href="#works" class="mobile-menu-link text-3xl font-bold uppercase tracking-widest opacity-0" style="transform: translateY(20px); transition: opacity 0.5s, transform 0.5s;">Works</a>
+            <a href="#about" class="mobile-menu-link text-3xl font-bold uppercase tracking-widest opacity-0" style="transform: translateY(20px); transition: opacity 0.5s, transform 0.5s; transition-delay: 0.1s;">About</a>
+            <a href="#service" class="mobile-menu-link text-3xl font-bold uppercase tracking-widest opacity-0" style="transform: translateY(20px); transition: opacity 0.5s, transform 0.5s; transition-delay: 0.2s;">Service</a>
+            <a href="#contact" class="mobile-menu-link text-3xl font-bold uppercase tracking-widest opacity-0" style="transform: translateY(20px); transition: opacity 0.5s, transform 0.5s; transition-delay: 0.3s;">Contact</a>
+        </nav>
+    </div>
+
+    <main>
+        <!-- ヒーローセクション -->
+        <section id="home" class="w-full flex flex-col md:h-screen md:relative md:justify-center text-center">
+            
+            <!-- Video Wrapper for layout control -->
+            <div class="relative w-full h-[60vh] md:absolute md:top-0 md:left-0 md:w-full md:h-full md:z-[-1]">
+                 <div id="hero-video-container">
+                    <div class="video-overlay"></div>
+                    <video autoplay loop muted playsinline id="hero-video" poster="https://placehold.co/1920x1080/000000/FFFFFF?text=Loading+Video...">
+                        <source src="hero_30min_0914.mp4#t=0,15" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+
+            <!-- Text Wrapper -->
+            <div class="z-10 px-4 py-16 text-center md:py-0">
+                <h1 class="text-4xl md:text-7xl font-black leading-tight tracking-tighter mb-4" style="text-shadow: 0px 0px 20px rgba(0,0,0,0.7);">
+                    <span class="reveal-up inline-block">人生最大の想い出を、</span><br class="md:hidden">
+                    <span class="reveal-up inline-block" style="transition-delay: 0.2s;">形にする。</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto reveal-up" style="transition-delay: 0.4s;">
+                    私たちは、人の感情や体験を“想い出”というかたちで記録し、<br>未来へと価値をつなぐ感情資産のクリエイターです。
+                </p>
+            </div>
+
+            <a href="#about" class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 scroll-down-icon">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </a>
+        </section>
+
+        <!-- Aboutセクション -->
+        <section id="about" class="py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center reveal-up">
+                <h2 class="text-sm uppercase tracking-widest accent-blue font-bold">Who We Are</h2>
+                <p class="text-3xl md:text-5xl font-black mt-4 max-w-4xl mx-auto leading-tight">
+                    想い出を、<br>価値ある資産として残す社会をつくる。
+                </p>
+                <p class="mt-8 max-w-2xl mx-auto text-gray-400 leading-relaxed">
+                    私たちは、記録・記憶・感情が“個人の財産”として認識される社会を目指します。<br>
+                    映像や写真を単なる記録ではなく、人の人生を彩る文化的インフラとして広め、<br>
+                    誰もが当たり前に“想い出を残せる”未来をつくります。
+                </p>
+            </div>
+        </section>
+
+        <!-- Worksセクション -->
+        <section id="works" class="py-20 md:py-32 bg-black">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 reveal-up">
+                    <h2 class="text-sm uppercase tracking-widest accent-blue font-bold">Latest Works</h2>
+                    <p class="text-3xl md:text-5xl font-black mt-4">実績紹介</p>
+                </div>
+                
+                <!-- Filter Buttons -->
+                <div class="flex justify-center flex-wrap gap-4 mb-12" id="works-filter">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="video">映像制作</button>
+                    <button class="filter-btn" data-filter="photo">写真撮影</button>
+                    <button class="filter-btn" data-filter="animation">アニメーション制作</button>
+                    <button class="filter-btn" data-filter="web">HP・LP制作</button>
+                </div>
+
+                <div id="works-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-container">
+                    <!-- YouTube密着動画 -->
+                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="video">
+                        <video autoplay loop muted playsinline src="work-video-youtube.mp4#t=0,15" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"></video>
+                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">YouTube密着動画</h3><p class="text-sm accent-blue">映像制作</p></div></div>
+                    </div>
+                    <!-- 建築撮影 -->
+                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="photo">
+                        <img src="work-photo-architecture.jpg" alt="建築撮影サムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">建築撮影</h3><p class="text-sm accent-blue">写真撮影</p></div></div>
+                    </div>
+                    <!-- アニメーション制作 1 -->
+                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="animation">
+                        <video autoplay loop muted playsinline src="work-animation-service-1.mp4#t=0,15" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"></video>
+                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">サービス紹介動画 #1</h3><p class="text-sm accent-blue">アニメーション制作</p></div></div>
+                    </div>
+                     <!-- 民泊＆料理教室PV -->
+                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="video">
+                        <video autoplay loop muted playsinline src="work-video-pv.mp4#t=0,15" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"></video>
+                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">民泊＆料理教室PV</h3><p class="text-sm accent-blue">映像制作</p></div></div>
+                    </div>
+                    <!-- HP・LP制作 -->
+                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="web">
+                        <img src="work-web-corporate.jpg" alt="コーポレートサイトサムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">コーポレートサイト</h3><p class="text-sm accent-blue">HP・LP制作</p></div></div>
+                    </div>
+                    <!-- アニメーション制作 2 -->
+                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="animation">
+                        <video autoplay loop muted playsinline src="work-animation-service-2.mp4#t=0,15" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"></video>
+                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">サービス紹介動画 #2</h3><p class="text-sm accent-blue">アニメーション制作</p></div></div>
+                    </div>
+                     <!-- 商品撮影 -->
+                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="photo">
+                        <img src="work-photo-product-new.jpg" alt="商品撮影サムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">商品撮影</h3><p class="text-sm accent-blue">写真撮影</p></div></div>
+                    </div>
+                    <!-- アニメーション制作 3 -->
+                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="animation">
+                        <video autoplay loop muted playsinline src="work-animation-service-3.mp4#t=0,15" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"></video>
+                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">サービス紹介動画 #3</h3><p class="text-sm accent-blue">アニメーション制作</p></div></div>
+                    </div>
+                </div>
+                <div class="text-center mt-16 reveal-up">
+                    <a href="#" class="inline-block text-sm font-bold uppercase tracking-widest border-2 border-accent-blue text-accent-blue px-8 py-3 rounded-full hover:bg-accent-blue hover:text-black transition-all duration-300">
+                        View More Works
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Serviceセクション -->
+        <section id="service" class="py-20 md:py-32">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16 reveal-up">
+                    <h2 class="text-sm uppercase tracking-widest accent-blue font-bold">Our Services</h2>
+                    <p class="text-3xl md:text-5xl font-black mt-4">事業内容</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center stagger-container">
+                    <!-- 映像制作 -->
+                    <div class="border border-gray-800 p-8 rounded-lg stagger-child">
+                        <svg class="w-12 h-12 mx-auto mb-6 accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        <h3 class="text-2xl font-bold mb-2">映像制作</h3>
+                        <p class="text-gray-400">心に響くストーリーと映像美で、企業や商品の価値を最大化します。</p>
+                    </div>
+                    <!-- 写真撮影 -->
+                    <div class="border border-gray-800 p-8 rounded-lg stagger-child" style="transition-delay: 0.1s;">
+                        <svg class="w-12 h-12 mx-auto mb-6 accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                        <h3 class="text-2xl font-bold mb-2">写真撮影</h3>
+                        <p class="text-gray-400">商品の魅力を最大限に引き出す、高品質なスチール撮影を提供します。</p>
+                    </div>
+                    <!-- アニメーション制作 -->
+                    <div class="border border-gray-800 p-8 rounded-lg stagger-child" style="transition-delay: 0.2s;">
+                        <svg class="w-12 h-12 mx-auto mb-6 accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"></path></svg>
+                        <h3 class="text-2xl font-bold mb-2">アニメーション制作</h3>
+                        <p class="text-gray-400">モーショングラフィックスで、複雑な情報も直感的に、魅力的に伝えます。</p>
+                    </div>
+                    <!-- HP・LP制作 -->
+                    <div class="border border-gray-800 p-8 rounded-lg stagger-child" style="transition-delay: 0.3s;">
+                        <svg class="w-12 h-12 mx-auto mb-6 accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                        <h3 class="text-2xl font-bold mb-2">HP・LP制作</h3>
+                        <p class="text-gray-400">デザインから実装まで一貫して、成果につながるウェブサイトを構築します。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contactセクション -->
+        <section id="contact" class="py-20 md:py-32 bg-black">
+            <div class="container mx-auto px-6 text-center reveal-up">
+                <h2 class="text-sm uppercase tracking-widest accent-blue font-bold">Get In Touch</h2>
+                <p class="text-3xl md:text-5xl font-black mt-4 max-w-4xl mx-auto leading-tight">
+                    新しいプロジェクトについて、<br>お気軽にご相談ください。
+                </p>
+                <a href="mailto:contact@happic.com" class="mt-12 inline-block text-lg font-bold bg-accent-blue text-black px-10 py-4 rounded-full hover:bg-white transition-all duration-300">
+                    お問い合わせはこちら
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- フッター -->
+    <footer class="py-8 border-t border-gray-800">
+        <div class="container mx-auto px-6 text-center text-gray-500">
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="#" class="text-gray-400 hover:text-accent-blue transition-colors duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-accent-blue transition-colors duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427C2.013 14.784 2 14.43 2 12s.013-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.06-1.004.048-1.625.212-2.126.41a3.096 3.096 0 00-1.137.746 3.096 3.096 0 00-.746 1.137c-.198.501-.362 1.122-.41 2.126-.048 1.023-.06 1.351-.06 3.807 0 2.456.011 2.784.06 3.807.048 1.004.212 1.625.41 2.126a3.096 3.096 0 00.746 1.137 3.096 3.096 0 001.137.746c.501.198 1.122.362 2.126.41 1.023.048 1.351.06 3.807.06h.468c2.456 0 2.784-.011 3.807-.06 1.004-.048 1.625-.212 2.126-.41a3.096 3.096 0 001.137-.746 3.096 3.096 0 00.746-1.137c.198-.501.362-1.122.41-2.126.048-1.023.06-1.351.06-3.807s-.011-2.784-.06-3.807c-.048-1.004-.212-1.625-.41-2.126a3.096 3.096 0 00-.746-1.137 3.096 3.096 0 00-1.137-.746c-.501-.198-1.122-.362-2.126-.41-1.023-.049-1.351-.06-3.807-.06zm2.848 1.947a.75.75 0 100-1.5.75.75 0 000 1.5zm-3.21 2.21a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm0 1.8a2.7 2.7 0 100 5.4 2.7 2.7 0 000-5.4z" clip-rule="evenodd"></path></svg>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-accent-blue transition-colors duration-300">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.78 22 12 22 12s0 3.22-.42 4.814a2.502 2.502 0 01-1.768 1.768c-1.594.42-7.812.42-7.812.42s-6.218 0-7.812-.42a2.502 2.502 0 01-1.768-1.768C2 15.22 2 12 2 12s0-3.22.42-4.814a2.502 2.502 0 011.768-1.768C5.782 5 12 5 12 5s6.218 0 7.812.418zM9.5 15.584V8.416a.5.5 0 01.75-.434l6 3.584a.5.5 0 010 .868l-6 3.584a.5.5 0 01-.75-.434z" clip-rule="evenodd"></path></svg>
+                </a>
+            </div>
+            <p>&copy; 2025 Happic. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // --- ローディング処理 v7.0 ---
+        const loader = document.getElementById('loader');
+        const loaderCounter = document.getElementById('loader-counter');
+        const loadingTime = 2000; // 2秒 (CSSのanimation-durationと合わせる)
+
+        // パーセンテージカウンターのアニメーション
+        let startTimestamp = null;
+        const updateCounter = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / loadingTime, 1);
+            const currentCount = Math.floor(progress * 100);
+            
+            loaderCounter.textContent = currentCount;
+
+            if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+            } else {
+                loaderCounter.textContent = 100;
+            }
+        };
+        // プログレスバーのアニメーションが開始するタイミング(1s後)に合わせてカウンターを開始
+        setTimeout(() => {
+            requestAnimationFrame(updateCounter);
+        }, 1000);
+        
+
+        window.onload = () => {
+            // ページ全体の読み込みが完了したら、ローディング画面を非表示にする
+            // CSSで設定したアニメーション時間（delay含む）より少し長く待つ
+            setTimeout(() => {
+                loader.classList.add('loading-finished');
+                
+                // ヒーローセクションのテキストを表示させる
+                const heroTexts = document.querySelectorAll('#home .reveal-up');
+                heroTexts.forEach(el => el.classList.add('visible'));
+
+                // ゲートアニメーション(1.2s)完了後にloaderを非表示にする
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 1300);
+
+            }, 3000);
+        };
+
+        // --- カスタムカーソル処理 ---
+        const cursor = document.querySelector('.cursor');
+        if (window.matchMedia("(pointer: coarse)").matches) {
+            cursor.style.display = 'none';
+        } else {
+            const interactiveElements = document.querySelectorAll('a, button, .group');
+            document.addEventListener('mousemove', e => {
+                cursor.setAttribute("style", "top: " + (e.pageY - scrollY) + "px; left: " + e.pageX + "px;");
+            });
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseover', () => cursor.classList.add('grow'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('grow'));
+            });
+        }
+
+        // --- モバイルメニュー処理 ---
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+        const openIcon = document.getElementById('menu-open-icon');
+        const closeIcon = document.getElementById('menu-close-icon');
+
+        const toggleMenu = () => {
+            const isMenuOpen = !mobileMenu.classList.contains('opacity-0');
+            mobileMenu.classList.toggle('opacity-0');
+            mobileMenu.classList.toggle('pointer-events-none');
+            openIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+            
+            mobileMenuLinks.forEach(link => {
+                if (!isMenuOpen) {
+                    link.classList.remove('opacity-0');
+                    link.style.transform = 'translateY(0)';
+                } else {
+                    link.classList.add('opacity-0');
+                    link.style.transform = 'translateY(20px)';
+                }
+            });
+        };
+
+        hamburgerBtn.addEventListener('click', toggleMenu);
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (!mobileMenu.classList.contains('opacity-0')) {
+                    toggleMenu();
+                }
+            });
+        });
+
+        // --- スクロールアニメーション処理 ---
+        const setupObserver = (selector, visibleClass, options) => {
+            const elements = document.querySelectorAll(selector);
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add(visibleClass);
+                    }
+                });
+            }, options);
+            elements.forEach(el => observer.observe(el));
+        };
+        
+        const setupStaggerObserver = () => {
+            const containers = document.querySelectorAll('.stagger-container');
+            containers.forEach(container => {
+                const elements = container.querySelectorAll('.stagger-child');
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            elements.forEach((el, index) => {
+                                el.style.transitionDelay = `${index * 0.1}s`;
+                                el.classList.add('visible');
+                            });
+                            observer.unobserve(container);
+                        }
+                    });
+                }, { threshold: 0.2 });
+                observer.observe(container);
+            });
+        };
+
+        setupObserver('.reveal-up', 'visible', { threshold: 0.5 });
+        setupStaggerObserver();
+
+        // --- Works Filter ---
+        const filterButtons = document.querySelectorAll('#works-filter .filter-btn');
+        const workItems = document.querySelectorAll('#works-grid .stagger-child');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Update active button state
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const filter = button.dataset.filter;
+
+                // Filter items
+                workItems.forEach(item => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    });
+    </script>
+</body>
+</html>
+
