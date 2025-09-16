@@ -22,6 +22,9 @@
         .hover\:bg-accent-blue:hover { background-color: #00BFFF; }
         .hover\:text-accent-blue:hover { color: #00BFFF; }
         a, button, .group { cursor: none; }
+        .hidden {
+            display: none;
+        }
 
         /* ローディング画面 v7.0 - Gate Open */
         #loader {
@@ -204,6 +207,11 @@
             border-color: #00BFFF;
             color: #0a0a0a;
         }
+        
+        /* Play Icon Overlay */
+        .play-icon-overlay {
+            transition: opacity 0.3s ease;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -266,7 +274,7 @@
                  <div id="hero-video-container">
                     <div class="video-overlay"></div>
                     <video autoplay loop muted playsinline id="hero-video" poster="https://placehold.co/1920x1080/000000/FFFFFF?text=Loading+Video...">
-                        <source src="hero_30min_0914.mp4#t=0,15" type="video/mp4">
+                        <source src="hero_30min_0914.mp4" type="video/mp4">
                     </video>
                 </div>
             </div>
@@ -315,51 +323,162 @@
                     <button class="filter-btn active" data-filter="all">All</button>
                     <button class="filter-btn" data-filter="video">映像制作</button>
                     <button class="filter-btn" data-filter="photo">写真撮影</button>
-                    <button class="filter-btn" data-filter="animation">アニメーション制作</button>
-                    <button class="filter-btn" data-filter="web">HP・LP制作</button>
+                    <button class="filter-btn" data-filter="animation">アニメーション</button>
+                    <button class="filter-btn" data-filter="web">HP・LP</button>
+                    <button class="filter-btn" data-filter="flyer">チラシ・パンフレット</button>
+                    <button class="filter-btn" data-filter="dvd">記録用DVD</button>
+                    <button class="filter-btn" data-filter="album">卒業アルバム</button>
                 </div>
 
-                <div id="works-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-container">
-                    <!-- YouTube密着動画 -->
-                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="video">
-                        <video autoplay loop muted playsinline src="work-video-youtube.mp4#t=0,15" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"></video>
-                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">YouTube密着動画</h3><p class="text-sm accent-blue">映像制作</p></div></div>
+                <div id="works-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- 海外研修動画 -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="video" data-video-src="work-video-youtube.mp4#t=0,15" data-thumbnail-src="work-video-youtube.jpg" data-alt="海外研修動画サムネイル">
+                        <img src="work-video-youtube.jpg" alt="海外研修動画サムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="play-icon-overlay absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 pointer-events-none"><svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">海外研修動画</h3><p class="text-sm accent-blue">映像制作</p></div></div>
                     </div>
+
+                    <!-- 密着動画＃1 (元YouTube密着動画) -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="video" data-video-src="work-video-youtube-new.mp4#t=0,15" data-thumbnail-src="work-video-youtube-new.jpg" data-alt="密着動画＃1サムネイル">
+                        <img src="work-video-youtube-new.jpg" alt="密着動画＃1サムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="play-icon-overlay absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 pointer-events-none"><svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">密着動画＃1</h3><p class="text-sm accent-blue">映像制作</p></div></div>
+                    </div>
+                    
+                    <!-- 密着動画＃2 (新規) -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="video" data-video-src="work-video-documentary-2.mp4#t=0,15" data-thumbnail-src="work-video-documentary-2.jpg" data-alt="密着動画＃2サムネイル">
+                        <img src="work-video-documentary-2.jpg" alt="密着動画＃2サムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="play-icon-overlay absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 pointer-events-none"><svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">密着動画＃2</h3><p class="text-sm accent-blue">映像制作</p></div></div>
+                    </div>
+
+                    <!-- 新築ルームツアー動画 (新規) -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="video" data-video-src="work-video-roomtour.mp4#t=0,15" data-thumbnail-src="work-video-roomtour.jpg" data-alt="新築ルームツアー動画サムネイル">
+                        <img src="work-video-roomtour.jpg" alt="新築ルームツアー動画サムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="play-icon-overlay absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 pointer-events-none"><svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">新築ルームツアー動画</h3><p class="text-sm accent-blue">映像制作</p></div></div>
+                    </div>
+
+                    <!-- インタビュー動画 (新規) -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="video" data-video-src="work-video-interview.mp4#t=0,15" data-thumbnail-src="work-video-interview.jpg" data-alt="インタビュー動画サムネイル">
+                        <img src="work-video-interview.jpg" alt="インタビュー動画サムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="play-icon-overlay absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 pointer-events-none"><svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">インタビュー動画</h3><p class="text-sm accent-blue">映像制作</p></div></div>
+                    </div>
+
+                    <!-- 民泊＆料理教室PV -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="video" data-video-src="work-video-pv.mp4#t=0,15" data-thumbnail-src="work-video-pv.jpg" data-alt="民泊＆料理教室PVサムネイル">
+                        <img src="work-video-pv.jpg" alt="民泊＆料理教室PVサムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="play-icon-overlay absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 pointer-events-none"><svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">民泊＆料理教室PV</h3><p class="text-sm accent-blue">映像制作</p></div></div>
+                    </div>
+
+                    <!-- アニメーション 1 -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="animation" data-video-src="work-animation-service-1.mp4#t=0,15" data-thumbnail-src="work-animation-service-1.jpg" data-alt="サービス紹介動画サムネイル1">
+                        <img src="work-animation-service-1.jpg" alt="サービス紹介動画サムネイル1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="play-icon-overlay absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 pointer-events-none"><svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">サービス紹介動画 #1</h3><p class="text-sm accent-blue">アニメーション</p></div></div>
+                    </div>
+
+                    <!-- アニメーション 2 -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="animation" data-video-src="work-animation-service-2.mp4#t=0,15" data-thumbnail-src="work-animation-service-2.jpg" data-alt="サービス紹介動画サムネイル2">
+                        <img src="work-animation-service-2.jpg" alt="サービス紹介動画サムネイル2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="play-icon-overlay absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 pointer-events-none"><svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">サービス紹介動画 #2</h3><p class="text-sm accent-blue">アニメーション</p></div></div>
+                    </div>
+                    
+                    <!-- コーポレートサイト -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="web" data-alt="コーポレートサイトサムネイル">
+                        <img src="work-web-corporate.jpg" alt="コーポレートサイトサムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">コーポレートサイト</h3><p class="text-sm accent-blue">HP・LP</p></div></div>
+                    </div>
+
+                    <!-- お掃除系LP -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="web" data-alt="お掃除系LPサムネイル">
+                        <img src="work-web-lp-cleaning.jpg" alt="お掃除系LPサムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">お掃除系LP</h3><p class="text-sm accent-blue">HP・LP</p></div></div>
+                    </div>
+
+                    <!-- イベント系LP -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="web" data-alt="イベント系LPサムネイル">
+                        <img src="work-web-lp-event.jpg" alt="イベント系LPサムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">イベント系LP</h3><p class="text-sm accent-blue">HP・LP</p></div></div>
+                    </div>
+
+                    <!-- 外壁洗浄チラシ (新規) -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="flyer" data-alt="外壁洗浄チラシサムネイル">
+                        <img src="work-flyer-wall.jpg" alt="外壁洗浄チラシサムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">外壁洗浄チラシ</h3><p class="text-sm accent-blue">チラシ・パンフレット</p></div></div>
+                    </div>
+
+                    <!-- 足場業者パンフレット (新規) -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="flyer" data-alt="足場業者パンフレットサムネイル">
+                        <img src="work-flyer-scaffolding1.jpg" alt="足場業者パンフレットサムネイル（表面）" class="w-full h-full object-cover transition-opacity duration-500">
+                        <img src="work-flyer-scaffolding2.jpg" alt="足場業者パンフレットサムネイル（裏面）" class="w-full h-full object-cover absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">足場業者パンフレット</h3><p class="text-sm accent-blue">チラシ・パンフレット</p></div></div>
+                    </div>
+
+                    <!-- 保育園パンフレット (新規) -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="flyer" data-alt="保育園パンフレットサムネイル">
+                        <img src="work-flyer-nursery1.jpg" alt="保育園パンフレットサムネイル（表面）" class="w-full h-full object-cover transition-opacity duration-500">
+                        <img src="work-flyer-nursery2.jpg" alt="保育園パンフレットサムネイル（裏面）" class="w-full h-full object-cover absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">保育園パンフレット</h3><p class="text-sm accent-blue">チラシ・パンフレット</p></div></div>
+                    </div>
+                    
+                    <!-- 保育園DVD制作（記録用） (新規) -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="dvd" data-video-src="work-dvd-nursery.mp4#t=0,15" data-thumbnail-src="work-dvd-nursery.jpg" data-alt="保育園DVD制作サムネイル">
+                        <img src="work-dvd-nursery.jpg" alt="保育園DVD制作サムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="play-icon-overlay absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 pointer-events-none"><svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">保育園DVD制作（記録用）</h3><p class="text-sm accent-blue">記録用DVD</p></div></div>
+                    </div>
+
+                    <!-- ショート動画 #1 -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="video" data-video-src="work-video-short-1.mp4#t=0,15" data-thumbnail-src="work-video-short-1.jpg" data-alt="ショート動画サムネイル1">
+                        <img src="work-video-short-1.jpg" alt="ショート動画サムネイル1" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="play-icon-overlay absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 pointer-events-none"><svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">ショート動画 #1</h3><p class="text-sm accent-blue">映像制作</p></div></div>
+                    </div>
+
+                    <!-- ショート動画 #2 -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="video" data-video-src="work-video-short-2.mp4#t=0,15" data-thumbnail-src="work-video-short-2.jpg" data-alt="ショート動画サムネイル2">
+                        <img src="work-video-short-2.jpg" alt="ショート動画サムネイル2" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="play-icon-overlay absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 pointer-events-none"><svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">ショート動画 #2</h3><p class="text-sm accent-blue">映像制作</p></div></div>
+                    </div>
+
+                    <!-- ショート動画 #3 -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="video" data-video-src="work-video-short-3.mp4#t=0,15" data-thumbnail-src="work-video-short-3.jpg" data-alt="ショート動画サムネイル3">
+                        <img src="work-video-short-3.jpg" alt="ショート動画サムネイル3" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="play-icon-overlay absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 pointer-events-none"><svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">ショート動画 #3</h3><p class="text-sm accent-blue">映像制作</p></div></div>
+                    </div>
+                    
+                    <!-- 税理士PR動画 -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="video" data-video-src="work-video-tax.mp4#t=0,15" data-thumbnail-src="work-video-tax.jpg" data-alt="税理士PR動画サムネイル">
+                        <img src="work-video-tax.jpg" alt="税理士PR動画サムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="play-icon-overlay absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 pointer-events-none"><svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">税理士PR動画</h3><p class="text-sm accent-blue">映像制作</p></div></div>
+                    </div>
+
                     <!-- 建築撮影 -->
-                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="photo">
-                        <img src="work-photo-architecture.jpg" alt="建築撮影サムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">建築撮影</h3><p class="text-sm accent-blue">写真撮影</p></div></div>
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="photo" data-alt="建築撮影サムネイル">
+                        <img src="work-photo-architecture.jpg" alt="建築撮影サムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">建築撮影</h3><p class="text-sm accent-blue">写真撮影</p></div></div>
                     </div>
-                    <!-- アニメーション制作 1 -->
-                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="animation">
-                        <video autoplay loop muted playsinline src="work-animation-service-1.mp4#t=0,15" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"></video>
-                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">サービス紹介動画 #1</h3><p class="text-sm accent-blue">アニメーション制作</p></div></div>
+                    
+                    <!-- 商品撮影 -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="photo" data-alt="商品撮影サムネイル">
+                        <img src="work-photo-product-new.jpg" alt="商品撮影サムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">商品撮影</h3><p class="text-sm accent-blue">写真撮影</p></div></div>
                     </div>
-                     <!-- 民泊＆料理教室PV -->
-                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="video">
-                        <video autoplay loop muted playsinline src="work-video-pv.mp4#t=0,15" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"></video>
-                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">民泊＆料理教室PV</h3><p class="text-sm accent-blue">映像制作</p></div></div>
+
+                    <!-- その他 -->
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="other" data-alt="その他の実績">
+                        <img src="other.png" alt="その他の実績" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">Other</h3><p class="text-sm accent-blue">実績</p></div></div>
                     </div>
-                    <!-- HP・LP制作 -->
-                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="web">
-                        <img src="work-web-corporate.jpg" alt="コーポレートサイトサムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">コーポレートサイト</h3><p class="text-sm accent-blue">HP・LP制作</p></div></div>
-                    </div>
-                    <!-- アニメーション制作 2 -->
-                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="animation">
-                        <video autoplay loop muted playsinline src="work-animation-service-2.mp4#t=0,15" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"></video>
-                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">サービス紹介動画 #2</h3><p class="text-sm accent-blue">アニメーション制作</p></div></div>
-                    </div>
-                     <!-- 商品撮影 -->
-                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="photo">
-                        <img src="work-photo-product-new.jpg" alt="商品撮影サムネイル" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">商品撮影</h3><p class="text-sm accent-blue">写真撮影</p></div></div>
-                    </div>
-                    <!-- アニメーション制作 3 -->
-                    <div class="group relative overflow-hidden rounded-lg stagger-child" data-category="animation">
-                        <video autoplay loop muted playsinline src="work-animation-service-3.mp4#t=0,15" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"></video>
-                        <div class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">サービス紹介動画 #3</h3><p class="text-sm accent-blue">アニメーション制作</p></div></div>
-                    </div>
+
                 </div>
                 <div class="text-center mt-16 reveal-up">
                     <a href="#" class="inline-block text-sm font-bold uppercase tracking-widest border-2 border-accent-blue text-accent-blue px-8 py-3 rounded-full hover:bg-accent-blue hover:text-black transition-all duration-300">
@@ -427,7 +546,7 @@
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
                 </a>
                 <a href="#" class="text-gray-400 hover:text-accent-blue transition-colors duration-300">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427C2.013 14.784 2 14.43 2 12s.013-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.06-1.004.048-1.625.212-2.126.41a3.096 3.096 0 00-1.137.746 3.096 3.096 0 00-.746 1.137c-.198.501-.362 1.122-.41 2.126-.048 1.023-.06 1.351-.06 3.807 0 2.456.011 2.784.06 3.807.048 1.004.212 1.625.41 2.126a3.096 3.096 0 00.746 1.137 3.096 3.096 0 001.137.746c.501.198 1.122.362 2.126.41 1.023.048 1.351.06 3.807.06h.468c2.456 0 2.784-.011 3.807-.06 1.004-.048 1.625-.212 2.126-.41a3.096 3.096 0 001.137-.746 3.096 3.096 0 00.746-1.137c.198-.501.362-1.122.41-2.126.048-1.023.06-1.351.06-3.807s-.011-2.784-.06-3.807c-.048-1.004-.212-1.625-.41-2.126a3.096 3.096 0 00-.746-1.137 3.096 3.096 0 00-1.137-.746c-.501-.198-1.122-.362-2.126-.41-1.023-.049-1.351-.06-3.807-.06zm2.848 1.947a.75.75 0 100-1.5.75.75 0 000 1.5zm-3.21 2.21a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm0 1.8a2.7 2.7 0 100 5.4 2.7 2.7 0 000-5.4z" clip-rule="evenodd"></path></svg>
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.012-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427C2.013 14.784 2 14.43 2 12s.013-2.784.06-3.808c.049-1.064.218 1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.06-1.004.048-1.625.212-2.126.41a3.096 3.096 0 00-1.137.746 3.096 3.096 0 00-.746 1.137c-.198.501-.362 1.122-.41 2.126-.048 1.023-.06 1.351-.06 3.807 0 2.456.011 2.784.06 3.807.048 1.004.212 1.625.41 2.126a3.096 3.096 0 00.746 1.137 3.096 3.096 0 001.137.746c.501.198 1.122.362 2.126.41 1.023.048 1.351.06 3.807.06h.468c-2.456 0 2.784-.011 3.807-.06 1.004-.048 1.625-.212 2.126-.41a3.096 3.096 0 001.137-.746 3.096 3.096 0 00.746-1.137c.198-.501.362-1.122.41-2.126.048-1.023.06-1.351.06-3.807s-.011-2.784-.06-3.807c-.048-1.004-.212-1.625-.41-2.126a3.096 3.096 0 00-.746-1.137 3.096 3.096 0 00-1.137-.746c-.501-.198-1.122-.362-2.126-.41-1.023-.049-1.351-.06-3.807-.06zm2.848 1.947a.75.75 0 100-1.5.75.75 0 000 1.5zm-3.21 2.21a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm0 1.8a2.7 2.7 0 100 5.4 2.7 2.7 0 000-5.4z" clip-rule="evenodd"></path></svg>
                 </a>
                 <a href="#" class="text-gray-400 hover:text-accent-blue transition-colors duration-300">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19.812 5.418c.861.23 1.538.907 1.768 1.768C21.998 8.78 22 12 22 12s0 3.22-.42 4.814a2.502 2.502 0 01-1.768 1.768c-1.594.42-7.812.42-7.812.42s-6.218 0-7.812-.42a2.502 2.502 0 01-1.768-1.768C2 15.22 2 12 2 12s0-3.22.42-4.814a2.502 2.502 0 011.768-1.768C5.782 5 12 5 12 5s6.218 0 7.812.418zM9.5 15.584V8.416a.5.5 0 01.75-.434l6 3.584a.5.5 0 010 .868l-6 3.584a.5.5 0 01-.75-.434z" clip-rule="evenodd"></path></svg>
@@ -565,12 +684,12 @@
             });
         };
 
-        setupObserver('.reveal-up', 'visible', { threshold: 0.5 });
+        setupObserver('.reveal-up', 'visible', { threshold: 0.2 });
         setupStaggerObserver();
 
         // --- Works Filter ---
         const filterButtons = document.querySelectorAll('#works-filter .filter-btn');
-        const workItems = document.querySelectorAll('#works-grid .stagger-child');
+        const workItems = document.querySelectorAll('#works-grid [data-category]');
 
         filterButtons.forEach(button => {
             button.addEventListener('click', (e) => {
@@ -591,6 +710,63 @@
                 });
             });
         });
+        
+        // --- Works Video Hover/Touch Handling ---
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        const videoItems = document.querySelectorAll('[data-video-src]');
+
+        videoItems.forEach(item => {
+            const playIcon = item.querySelector('.play-icon-overlay');
+            if (isTouchDevice) {
+                // On touch devices, just show the play icon
+                if(playIcon) playIcon.style.opacity = '1';
+            } else {
+                // On desktop, play video on hover
+                item.addEventListener('mouseenter', () => {
+                    const mediaElement = item.querySelector('.work-media');
+                    if (mediaElement.tagName === 'VIDEO') return; // Exit if already a video
+                    const videoSrc = item.dataset.videoSrc;
+                    
+                    const video = document.createElement('video');
+                    video.src = videoSrc;
+                    video.className = mediaElement.className; // copy classes
+                    video.autoplay = true;
+                    video.loop = true;
+                    video.muted = true;
+                    video.playsinline = true;
+                    
+                    mediaElement.replaceWith(video);
+                    
+                    const playPromise = video.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            // Video playback failed, revert to thumbnail.
+                            // No need to log error for missing files.
+                            const thumbnailSrc = item.dataset.thumbnailSrc;
+                            const img = document.createElement('img');
+                            img.src = thumbnailSrc;
+                            img.className = video.className;
+                            img.alt = item.dataset.alt || '';
+                            video.replaceWith(img);
+                        });
+                    }
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    const mediaElement = item.querySelector('.work-media');
+                    if (mediaElement.tagName === 'IMG') return; // Exit if already an image
+                    const thumbnailSrc = item.dataset.thumbnailSrc;
+
+                    const img = document.createElement('img');
+                    img.src = thumbnailSrc;
+                    img.className = mediaElement.className;
+                    img.alt = item.dataset.alt || '';
+                    
+                    mediaElement.replaceWith(img);
+                });
+            }
+        });
+
     });
     </script>
 </body>
