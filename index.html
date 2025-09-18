@@ -271,7 +271,7 @@
 
     <main>
         <!-- ヒーローセクション -->
-        <section id="home" class="w-full flex flex-col md:h-screen md:relative md:justify-center text-center">
+        <section id="home" class="w-full flex flex-col md:h-screen relative md:justify-center text-center">
             
             <!-- Video Wrapper for layout control -->
             <div class="relative w-full h-[60vh] md:absolute md:top-0 md:left-0 md:w-full md:h-full md:z-[-1]">
@@ -290,7 +290,7 @@
                     <span class="reveal-up inline-block" style="transition-delay: 0.2s;">形にする。</span>
                 </h1>
                 <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto reveal-up" style="transition-delay: 0.4s;">
-                    私たちは、人の感情や体験を“想い出”というかたちで記録し、<br>未来へと価値をつなぐ感情資産のクリエイターです。
+                    私たちは、人の感情や体験を“想い出”という<br>かたちで記録し、<br>未来へと価値をつなぐ感情資産の<br>クリエイターです。
                 </p>
             </div>
 
@@ -304,12 +304,12 @@
             <div class="container mx-auto px-6 text-center reveal-up">
                 <h2 class="text-sm uppercase tracking-widest accent-blue font-bold">Who We Are</h2>
                 <p class="text-3xl md:text-5xl font-black mt-4 max-w-4xl mx-auto leading-tight">
-                    想い出を、<br>価値ある資産として残す社会をつくる。
+                    想い出を<br>価値ある資産として残す<br>社会をつくる。
                 </p>
                 <p class="mt-8 max-w-2xl mx-auto text-gray-400 leading-relaxed">
-                    私たちは、記録・記憶・感情が“個人の財産”として認識される社会を目指します。<br>
-                    映像や写真を単なる記録ではなく、人の人生を彩る文化的インフラとして広め、<br>
-                    誰もが当たり前に“想い出を残せる”未来をつくります。
+                    私たちは、記録・記憶・感情が“個人の財産”として<br>認識される社会を目指します。<br>
+                    映像や写真を単なる記録ではなく、<br>人の人生を彩る文化的インフラとして広め、<br>
+                    誰もが当たり前に“想い出を残せる”未来を<br>つくります。
                 </p>
             </div>
         </section>
@@ -486,7 +486,7 @@
                     </div>
 
                     <!-- その他 -->
-                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9]" data-category="other" data-alt="その他の実績">
+                    <div class="group relative overflow-hidden rounded-lg reveal-up aspect-[16/9] hidden" data-category="other" data-alt="その他の実績">
                         <img src="other.png" alt="その他の実績" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 work-media">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent to-40% flex items-end justify-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500"><div class="text-center p-4"><h3 class="text-xl font-bold">Other</h3><p class="text-sm accent-blue">実績</p></div></div>
                     </div>
@@ -541,7 +541,7 @@
             <div class="container mx-auto px-6 text-center reveal-up">
                 <h2 class="text-sm uppercase tracking-widest accent-blue font-bold">Get In Touch</h2>
                 <p class="text-3xl md:text-5xl font-black mt-4 max-w-4xl mx-auto leading-tight">
-                    新しいプロジェクトについて、<br>お気軽にご相談ください。
+                    スピード対応を<br>常に心がけております。<br>お気軽にご相談ください。
                 </p>
                 <a href="mailto:contact@happic.com" class="mt-12 inline-block text-lg font-bold bg-accent-blue text-black px-10 py-4 rounded-full hover:bg-white transition-all duration-300">
                     お問い合わせはこちら
@@ -730,8 +730,29 @@
         videoItems.forEach(item => {
             const playIcon = item.querySelector('.play-icon-overlay');
             if (isTouchDevice) {
-                // On touch devices, just show the play icon
+                // On touch devices, show play icon and handle click-to-play
                 if(playIcon) playIcon.style.opacity = '1';
+
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const mediaElement = item.querySelector('.work-media');
+                    if (mediaElement && mediaElement.tagName === 'VIDEO') return; // Already a video
+
+                    const videoSrc = item.dataset.videoSrc;
+                    if (!videoSrc) return;
+
+                    const video = document.createElement('video');
+                    video.src = videoSrc;
+                    if(mediaElement) video.className = mediaElement.className.replace('group-hover:scale-110', ''); // copy classes, remove hover effect
+                    video.autoplay = true;
+                    video.loop = false; // Don't loop on mobile, allow user to replay
+                    video.muted = false; // Unmute for user-initiated playback
+                    video.controls = true; // Add controls for touch
+                    video.playsinline = true;
+                    
+                    if(mediaElement) mediaElement.replaceWith(video);
+                    video.play();
+                });
             } else {
                 // On desktop, play video on hover
                 item.addEventListener('mouseenter', () => {
